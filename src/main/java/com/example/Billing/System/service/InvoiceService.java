@@ -1,10 +1,13 @@
 package com.example.Billing.System.service;
 
-import com.example.Billing.System.controller.Invoice;
-import org.springframework.stereotype.Service;
+import com.example.Billing.System.model.InvoiceDTO;
+
+import java.util.UUID;
 
 
 public interface InvoiceService {
 
-    void createInvoice(Invoice invoice);
+    void createInvoice(InvoiceDTO invoiceDTO);
+
+    void getInvoiceById(UUID id);
 }
