@@ -10,7 +10,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Data
 public class User {
 

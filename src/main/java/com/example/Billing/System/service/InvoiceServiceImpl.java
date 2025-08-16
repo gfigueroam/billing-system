@@ -3,24 +3,22 @@ package com.example.Billing.System.service;
 import com.example.Billing.System.model.InvoiceDTO;
 import com.example.Billing.System.repository.InvoiceRepository;
 import com.example.Billing.System.repository.entities.Invoice;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
-
 @Service
-public abstract class InvoiceServiceImpl implements InvoiceService {
+@AllArgsConstructor
+@NoArgsConstructor
+public class InvoiceServiceImpl implements InvoiceService {
+
     private InvoiceRepository repository;
-
-    @Autowired
     private ModelMapper modelMapper;
-
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository) {
-        this.repository = invoiceRepository;
-
-    }
 
     @Override
     public void createInvoice(InvoiceDTO invoiceDTO) {
@@ -30,11 +28,10 @@ public abstract class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public void getInvoiceById(UUID id) {
-        //.findById
-        Invoice invoiceEntity = repository.getReferenceById(id);
-        InvoiceDTO invoiceDTO = modelMapper.map(invoiceEntity,InvoiceDTO.class);
-
-
+    public InvoiceDTO getInvoiceById(UUID id) throws EntityNotFoundException {
+        Optional<Invoice> invoiceEntity = repository.findById(id);
+        if (invoiceEntity.isEmpty())
+            throw new EntityNotFoundException("User not found");
+        return modelMapper.map(invoiceEntity, InvoiceDTO.class);
     }
 }

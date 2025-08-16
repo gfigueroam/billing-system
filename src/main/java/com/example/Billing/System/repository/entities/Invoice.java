@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table (name = "invoices")
+@Table(name = "invoices")
 @ToString
 @Data
 public class Invoice {
@@ -23,14 +23,13 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column (name="company_name")
+    @Column(name = "company_name")
     private String companyName;
 
     private BigDecimal amount;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
-
 
 }
