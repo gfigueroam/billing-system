@@ -2,36 +2,55 @@ package com.example.Billing.System.service;
 
 import com.example.Billing.System.model.InvoiceDTO;
 import com.example.Billing.System.repository.InvoiceRepository;
+import com.example.Billing.System.repository.UserRepository;
 import com.example.Billing.System.repository.entities.Invoice;
+import com.example.Billing.System.repository.entities.User;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService {
 
-    private InvoiceRepository repository;
-    private ModelMapper modelMapper;
+    private final InvoiceRepository invoiceRepository;
+    private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
+
+    public InvoiceServiceImpl(InvoiceRepository repository, ModelMapper modelMapper, UserRepository userRepository) {
+        this.invoiceRepository = repository;
+        this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
+    }
+
 
     @Override
     public void createInvoice(InvoiceDTO invoiceDTO) {
         Invoice invoiceEntity = modelMapper.map(invoiceDTO, Invoice.class);
-        System.out.println(invoiceEntity.toString());
-        repository.save(invoiceEntity);
+        invoiceEntity.setId(null);
+        Optional<User> user = userRepository.findById(invoiceDTO.getUserId());
+        System.out.println(user);
+        if (user.isEmpty())
+            throw new EntityNotFoundException("User not found");
+        invoiceRepository.save(invoiceEntity);
     }
 
     @Override
     public InvoiceDTO getInvoiceById(UUID id) throws EntityNotFoundException {
-        Optional<Invoice> invoiceEntity = repository.findById(id);
+        Optional<Invoice> invoiceEntity = invoiceRepository.findById(id);
         if (invoiceEntity.isEmpty())
-            throw new EntityNotFoundException("User not found");
+            throw new EntityNotFoundException("Invoice not found");
         return modelMapper.map(invoiceEntity, InvoiceDTO.class);
+    }
+
+    @Override
+    public List<InvoiceDTO> getInvoices() {
+        return invoiceRepository.findAll()
+                .stream()
+                .map(invoice -> modelMapper.map(invoice, InvoiceDTO.class))
+                .toList();
     }
 }

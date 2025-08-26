@@ -18,9 +18,11 @@ import java.util.UUID;
 public class InvoiceDTO {
 
         private UUID userId;
-        @NotBlank private String companyName;
+        @NotBlank(message= "Company name must not be blank")
+        private String companyName;
         //MethodArgumentNotValidException
-        @PastOrPresent private LocalDate date;
+        @PastOrPresent(message= "Date can't be in the future" )
+        private LocalDate date;
         private BigDecimal amount;
 
 }

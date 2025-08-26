@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,6 +42,13 @@ public class InvoiceController {
             return new ResponseEntity<>(e.getMessage(),
                     HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getInvoices() {
+        List<InvoiceDTO> invoices = invoiceService.getInvoices();
+        return new ResponseEntity<>(invoices,
+                HttpStatus.OK);
     }
 
 
