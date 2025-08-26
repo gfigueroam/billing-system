@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +28,9 @@ public class Invoice {
     private String companyName;
 
     private BigDecimal amount;
+
+    @Column(name = "invoice_date")
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

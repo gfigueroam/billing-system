@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class )
-    public ResponseEntity<?> handleEntityNotFound(Exception e){
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFound(Exception e) {
         System.out.println("Entering the controller advice");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"+ e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found" + e.getMessage());
     }
 
-    @ExceptionHandler( MethodArgumentNotValidException.class )
-    public ResponseEntity<?> handleMethodArgumentNotValidException(Exception e){
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleMethodArgumentNotValidException(Exception e) {
         System.out.println("Entering the controller advice");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request"+ e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request" + e.getMessage());
     }
 
 }
