@@ -16,3 +16,5 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
           ddl-auto: none
+mockito:
+  version: 5.18.0

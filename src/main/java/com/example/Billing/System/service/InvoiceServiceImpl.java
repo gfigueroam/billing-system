@@ -9,15 +9,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
@@ -32,13 +27,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public void createInvoice(InvoiceDTO invoiceDTO) {
         Invoice invoiceEntity = modelMapper.map(invoiceDTO, Invoice.class);
         invoiceEntity.setId(null);
+
         Optional<User> user = userRepository.findById(invoiceDTO.getUserId());
-        System.out.println(user);
+
         if (user.isEmpty())
             throw new EntityNotFoundException("User not found");
         invoiceRepository.save(invoiceEntity);
@@ -55,6 +50,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public Page<InvoiceDTO> getInvoices(Pageable pageable) {
         return invoiceRepository.findAll(pageable)
-                .map(invoice -> modelMapper.map(invoice, InvoiceDTO.class)) ;
+                .map(invoice -> modelMapper.map(invoice, InvoiceDTO.class));
     }
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface InvoiceService {
 
-    void createInvoice(InvoiceDTO invoiceDTO);
+    void createInvoice(InvoiceDTO invoiceDTO) ;
 
     InvoiceDTO getInvoiceById(UUID id) throws EntityNotFoundException;
 
