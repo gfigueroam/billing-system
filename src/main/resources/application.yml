@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: Billing-System
@@ -14,7 +15,5 @@ spring:
    # password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-          ddl-auto: none
-mockito:
-  version: 5.18.0
+   # hibernate:
+    #      ddl-auto: none
