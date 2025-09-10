@@ -1,5 +1,6 @@
 package com.example.billing.service;
 
+import com.example.billing.model.LoginResponse;
 import com.example.billing.model.LoginUserDto;
 import com.example.billing.model.RegisterUserDto;
 import com.example.billing.repository.UserRepository;
@@ -11,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 @AllArgsConstructor
@@ -20,6 +23,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
+    private final JwtService jwtService;
 
 
     public User signup(RegisterUserDto input) {
@@ -29,7 +33,10 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
-    public User authenticate(LoginUserDto input) {
+    public LoginResponse authenticate(LoginUserDto input) {
+
+        Optional<User> authenticatedUser = userRepository.findByEmail(input.email());
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.email(),
@@ -37,7 +44,14 @@ public class AuthenticationService {
                 )
         );
 
-        return userRepository.findByEmail(input.email()).orElseThrow();
+        String jwtToken = jwtService.generateToken(authenticatedUser.get());
+
+        LoginResponse loginResponse = LoginResponse.builder()
+                .token(jwtToken)
+                .expiresIn(jwtService.getExpirationTime())
+                .build();
+
+        return loginResponse;
     }
 }
 
