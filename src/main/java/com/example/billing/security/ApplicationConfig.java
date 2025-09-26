@@ -35,6 +35,7 @@ public class ApplicationConfig {
     }
 
     @Bean
+    /*implementation that retrieves the user details from a UserDetails Service*/
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());

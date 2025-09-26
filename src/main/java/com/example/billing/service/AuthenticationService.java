@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 
@@ -19,12 +20,11 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager; //bean
     private final ModelMapper modelMapper;
     private final JwtService jwtService;
-
+    private final UserRepository userRepository;
 
     public User signup(RegisterUserDto input) {
         User user = modelMapper.map(input, User.class);
@@ -33,25 +33,14 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
-    public LoginResponse authenticate(LoginUserDto input) {
-
-        Optional<User> authenticatedUser = userRepository.findByEmail(input.email());
-
+    public User authenticate(LoginUserDto input) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.email(),
                         input.password()
                 )
         );
-
-        String jwtToken = jwtService.generateToken(authenticatedUser.get());
-
-        LoginResponse loginResponse = LoginResponse.builder()
-                .token(jwtToken)
-                .expiresIn(jwtService.getExpirationTime())
-                .build();
-
-        return loginResponse;
+        return userRepository.findByEmail(input.email()).orElseThrow();
     }
 }
 

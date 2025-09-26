@@ -1,9 +1,9 @@
-  security:
+security:
     jwt:
       secret-key: b9fc829dd25923fea6e50d2c283437f00b4974285d186e1ffe920576a7709498 #testing key
       expiration-time: 3600000
 
-  spring:
+spring:
   application:
     name: Billing-System
   h2:
@@ -19,5 +19,10 @@
    # password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-   # hibernate:
-    #      ddl-auto: none
+    #hibernate:
+         # ddl-auto: none
+    defer-datasource-initialization: true
+#server:
+#  error:
+#    include-binding-errors: always
+#    include-message: always
